@@ -18,7 +18,7 @@ In your awesome configuration directory:
 
 In your rc.lua:
 ```lua
-local redshift = require("redshift")`
+local redshift = require("redshift")
 ```
 ```lua
 -- set binary path (optional)
