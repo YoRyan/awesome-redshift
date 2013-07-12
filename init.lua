@@ -47,7 +47,7 @@ redshift.undim = function()
         end
     end
     redshift.state = 0
-    redshift.timer:start()
+    redshift.timer:stop()
 end
 redshift.toggle = function()
     if redshift.state == 1
