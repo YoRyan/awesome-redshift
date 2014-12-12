@@ -13,7 +13,8 @@ redshift.redshift = "/usr/bin/redshift"    -- binary path
 redshift.method = "randr"                  -- randr or vidmode
 redshift.options = ""                      -- additional redshift command options
 redshift.state = 1                         -- 1 for screen dimming, 0 for none
-redshift.timer = timer({ timeout = 60 })
+local timer = require("gears.timer")
+redshift.timer =  timer { timeout = 60 }
 
 -- functions
 redshift.dim = function()
@@ -29,10 +30,14 @@ redshift.dim = function()
                              " -o " .. redshift.options)
         end
     end
-    redshift.state = 1
-    redshift.timer:start()
+    if not redshift.timer.started then
+        redshift.state = 1
+        redshift.timer:start()
+    end
 end
+
 redshift.timer:connect_signal("timeout", redshift.dim)
+
 redshift.undim = function()
     if redshift.method == "randr"
     then
@@ -46,9 +51,12 @@ redshift.undim = function()
                              " -x " .. redshift.options)
         end
     end
-    redshift.state = 0
-    redshift.timer:stop()
+    if redshift.timer.started then
+        redshift.state = 0
+        redshift.timer:stop()
+    end
 end
+
 redshift.toggle = function()
     if redshift.state == 1
     then
@@ -57,6 +65,7 @@ redshift.toggle = function()
         redshift.dim()
     end
 end
+
 redshift.init = function(initState)
     if initState == 1
     then
